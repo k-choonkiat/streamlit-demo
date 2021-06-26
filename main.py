@@ -2,6 +2,7 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 import requests
+from PIL import Image
 import pydeck as pdk
 
 #importing the data for weather 
@@ -19,8 +20,6 @@ df = region_info.merge(pm,left_on="name",right_on="region")
 df = df.drop(['region'],axis=1)
 
 st.title('Weather and environment application')
-
-#st.map(region_info)
 
 st.pydeck_chart(pdk.Deck(
      map_style='mapbox://styles/mapbox/light-v9',
@@ -53,6 +52,9 @@ st.pydeck_chart(pdk.Deck(
      ],
  ))
 
+area= st.text_input(label="Enter an area",value='north')
+st.write("The pm for the ", area, " is ", df[df['name']==area]['pm25_one_hourly'])
+
 st.header("The raw data as tables")
 st.subheader("Combined table")
 st.write(df)
@@ -60,6 +62,9 @@ st.subheader("Region data")
 st.write(region_info)
 st.subheader("PM data")
 st.write(pm_info)
+st.subheader("PM info chart")
+image = Image.open('images/pm.jpg')
+st.image(image,caption='Guidance for PM levels')
 
 
 expander = st.beta_expander("What is this")
@@ -67,4 +72,4 @@ expander.write("A test project I wanted to create to test out Streamlit :)")
 expander = st.beta_expander("What is my end goal?")
 expander.write("A simple app that will dislpay PSI and also weather data and maybe even with alert systems")
 expander = st.beta_expander("To do:")
-expander.write("add weather data, add UV data")
+expander.write("add weather data, add UV data, build data engineering pipelines")
